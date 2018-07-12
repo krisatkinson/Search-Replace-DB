@@ -741,7 +741,8 @@ class icit_srdb {
 				foreach ( $data as $key => $value ) {
 					if( $this->is_serialized_recursive_object( $value )  ) {
 						throw new Exception( "Cannot find/replace in serialized recursive objects!" );
-					} else {
+					}
+					else {
 						$_tmp[ $key ] = $this->recursive_unserialize_replace( $from, $to, $value, false );
 					}
 				}
@@ -758,7 +759,8 @@ class icit_srdb {
 				foreach ( $props as $key => $value ) {
 					if( $this->is_serialized_recursive_object( $value )  ) {
 						throw new Exception( "Cannot find/replace in serialized recursive objects!" );
-					} else {
+					}
+					else {
 						$_tmp->$key = $this->recursive_unserialize_replace( $from, $to, $value, false );
 					}
 				}
