@@ -739,7 +739,11 @@ class icit_srdb {
 			elseif ( is_array( $data ) ) {
 				$_tmp = array( );
 				foreach ( $data as $key => $value ) {
-					$_tmp[ $key ] = $this->recursive_unserialize_replace( $from, $to, $value, false );
+					if( $this->is_serialized_recursive_object( $value )  ) {
+						throw new Exception( "Cannot find/replace in serialized recursive objects!" );
+					} else {
+						$_tmp[ $key ] = $this->recursive_unserialize_replace( $from, $to, $value, false );
+					}
 				}
 
 				$data = $_tmp;
@@ -752,7 +756,11 @@ class icit_srdb {
 				$_tmp = $data; // new $data_class( );
 				$props = get_object_vars( $data );
 				foreach ( $props as $key => $value ) {
-					$_tmp->$key = $this->recursive_unserialize_replace( $from, $to, $value, false );
+					if( $this->is_serialized_recursive_object( $value )  ) {
+						throw new Exception( "Cannot find/replace in serialized recursive objects!" );
+					} else {
+						$_tmp->$key = $this->recursive_unserialize_replace( $from, $to, $value, false );
+					}
 				}
 
 				$data = $_tmp;
@@ -776,6 +784,15 @@ class icit_srdb {
 		}
 
 		return $data;
+	}
+
+	/**
+	 * @param $value
+	 *
+	 * @return bool
+	 */
+	public function is_serialized_recursive_object( $value ) {
+		return false !== strpos(print_r($value, true), "*RECURSION*");
 	}
 
 
